@@ -538,7 +538,36 @@ go func() {
 <p style="text-align:center"> </p>
 
 <p style="text-align:center">ch := make(chan int, <em>10</em>)</p>
-</div></div></section><section><div class="sl-block" data-block-type="code" data-block-id="ab7eadc002d45f8e2bf614c7d69b751b" style="min-width: 30px; min-height: 30px; width: 800px; height: 461px; left: 80px; top: 70px;"><div class="sl-block-content" style="z-index: 11;"><pre><code>func addData() {
+</div></div></section><section><div class="sl-block" data-block-type="code" style="width: 560px; height: 461px; left: 80px; top: 70px;" data-block-id="19af4a91e438b2a03d09416f813e91f5"><div class="sl-block-content" style="z-index: 11;"><pre><code>channel := make(chan int, 10)
+
+go func() {
+    for i := 0; i &lt; 10; i++ {
+	channel &lt;- i
+	time.Sleep(100 * time.Millisecond)
+    }
+}()
+
+time.Sleep(500 * time.Millisecond)
+
+for i := 0; i &lt; 5; i++ {
+    &lt;-channel
+}
+
+time.Sleep(500 * time.Millisecond)
+
+for i := 0; i &lt; 5; i++ {
+    &lt;-channel
+}</code></pre></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 80px; top: 552px;" data-block-id="bd1e9de8fb4b749b75c3b18640800305"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12;">
+<ul>
+	<li>in scrittura è bloccante solo se il buffer è pieno</li>
+	<li>in lettura è bloccante solo se il buffer è vuoto</li>
+</ul>
+</div></div>
+<div class="sl-block" data-block-type="code" style="min-width: 30px; min-height: 30px; width: 214px; height: 461px; left: 666px; top: 70px;" data-block-id="d38826a8977352bb31add2f73a04db7d"><div class="sl-block-content" style="z-index: 13;"><pre><code>real	0m1.001s
+user	0m0.000s
+sys	0m0.000s
+</code></pre></div></div></section><section><div class="sl-block" data-block-type="code" data-block-id="ab7eadc002d45f8e2bf614c7d69b751b" style="min-width: 30px; min-height: 30px; width: 800px; height: 461px; left: 80px; top: 50px;"><div class="sl-block-content" style="z-index: 11;"><pre><code>func addData() {
 
     data := make(chan int)
 
@@ -559,8 +588,12 @@ go func() {
 
     return x + y
 }</code></pre></div></div>
-<div class="sl-block" data-block-type="text" data-block-id="98dbf81fca304f4752970f8fe42aecf9" style="height: auto; min-width: 30px; min-height: 30px; width: 800px; left: 80px; top: 591px;"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12;">
-<p>il channel se è bloccante, è usabile per fare il sync di goroutine</p>
+<div class="sl-block" data-block-type="text" data-block-id="98dbf81fca304f4752970f8fe42aecf9" style="height: auto; min-width: 30px; min-height: 30px; width: 800px; left: 80px; top: 538px;"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12;">
+<ul>
+	<li>in scrittura è bloccante fino ad una lettura</li>
+	<li>in lettura è bloccante fino ad una scrittura</li>
+	<li>di fatto è un modo per fare il sync</li>
+</ul>
 </div></div></section><section><div class="sl-block" data-block-type="code" style="width: 800px; height: 461px; left: 80px; top: 39px;" data-block-id="abdc68c64df854296375df8f974516f4"><div class="sl-block-content" style="z-index: 11;"><pre><code>func addData() {
 
     data := make(chan int)
